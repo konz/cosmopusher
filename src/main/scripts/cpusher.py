@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Cosmopusher. Reads and parses data from N560 pulse oxymeters and sends it to AWS SNS topics.
+"""Cosmopusher. Reads and parses data from N560 pulse oxymeters and sends it to AWS IoT.
 
 Usage:
   cpusher.py (-h | --help)
