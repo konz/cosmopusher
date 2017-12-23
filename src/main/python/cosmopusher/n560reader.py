@@ -34,7 +34,7 @@ class N560Reader:
             sp_o2 = int(data_match.group(2))
             pulse = int(data_match.group(3))
 
-            self.pusher.spawn({
+            self.pusher.push({
                 'time': time,
                 'spO2': sp_o2,
                 'pulse': pulse
@@ -46,7 +46,7 @@ class N560Reader:
             pulse_lower_limit = int(settings_match.group(5))
             pulse_upper_limit = int(settings_match.group(6))
 
-            self.pusher.spawn({
+            self.pusher.push({
                 'time': time,
                 'spO2LowerLimit': sp_o2_lower_limit,
                 'spO2UpperLimit': sp_o2_upper_limit,

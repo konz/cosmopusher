@@ -16,3 +16,4 @@ def set_properties(project):
     project.depends_on("gevent")
     project.depends_on("pyserial")
     project.depends_on("docopt")
+    project.depends_on("AWSIoTPythonSDK")

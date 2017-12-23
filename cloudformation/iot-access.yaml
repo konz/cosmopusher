@@ -1,0 +1,19 @@
+Description: "Creates an IAM user with permissions to send events from Cosmopusher to AWS IoT"
+Resources:
+  deviceUser:
+    Type: AWS::IAM::User
+    Properties:
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AWSIoTDataAccess"
+      UserName: pusher-device
+  key:
+    Type: AWS::IAM::AccessKey
+    Properties:
+      UserName: !Ref deviceUser
+Outputs:
+  accessKey:
+    Description: "Access key of the IAM user that is allowed to send messages"
+    Value: !Ref key
+  secretAccessKey:
+    Description: "Secret access key of the IAM user that is allowed to send messages"
+    Value: !GetAtt key.SecretAccessKey

@@ -4,11 +4,11 @@ import gevent
 from gevent import Greenlet
 
 
-class PrintPusher(Greenlet):
+class PrintLine(Greenlet):
 
-    def __init__(self, line):
+    def __init__(self, payload):
         Greenlet.__init__(self)
-        self.line = line
+        self.payload = payload
         self.delayed = 0
 
     def _run(self):
@@ -23,4 +23,10 @@ class PrintPusher(Greenlet):
         if randint(0, 1) == 0:
             raise Exception
         else:
-            print("DELAYED: {}: {}".format(self.delayed, self.line))
+            print("DELAYED: {}: {}".format(self.delayed, self.payload))
+
+
+class PrintPusher(Greenlet):
+
+    def push(self, payload):
+        PrintLine.spawn(payload)
