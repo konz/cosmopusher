@@ -5,12 +5,14 @@
 Usage:
   cpusher.py (-h | --help)
   cpusher.py (-d | --demo)
-  cpusher.py [-d] --iot --endpoint=ENDPOINT --root-ca=FILE [--topic=TOPIC_NAME]
+  cpusher.py [-d] --endpoint=ENDPOINT --root-ca=FILE [--topic=TOPIC_NAME]
+  cpusher.py (-p | --print) [-d]
 
 Options:
   -h --help                 Show this screen.
   -d --demo                 Send some demo data.
-  --iot                     Send data to AWS IoT, IAM access credentials required. Requires additional options:
+  -p --print                Instead of sending it to IoT, just print out the data.
+                            (together with some simulation of delay)
   --endpoint=HOSTNAME       AWS IoT endpoint
   --root-ca=FILE            AWS IoT root certificate file
   --topic=TOPIC_NAME        AWS IoT topic name [default: cosmo]
@@ -34,10 +36,10 @@ if __name__ == '__main__':
     else:
         stream = serial.Serial("/dev/serial0", timeout=120)
 
-    if arguments['--iot']:
-        pusher = IotPusher(arguments['--endpoint'], arguments['--root-ca'], arguments['--topic'])
-    else:
+    if arguments['--print']:
         pusher = PrintPusher()
+    else:
+        pusher = IotPusher(arguments['--endpoint'], arguments['--root-ca'], arguments['--topic'])
 
     reader = N560Reader(stream, pusher)
     try:
