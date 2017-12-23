@@ -16,7 +16,7 @@ class N560ReaderTests(TestCase):
         reader = N560Reader(data, pusher)
         reader.run()
 
-        pusher.spawn.assert_called_with(
+        pusher.push.assert_called_with(
             match_equality(
                 all_of(
                     has_entry('time', matches_regexp(TIMESTAMP_REGEX)),
@@ -31,7 +31,7 @@ class N560ReaderTests(TestCase):
         reader = N560Reader(data, pusher)
         reader.run()
 
-        pusher.spawn.assert_called_with(
+        pusher.push.assert_called_with(
             match_equality(
                 all_of(
                     has_entry('time', matches_regexp(TIMESTAMP_REGEX)),
