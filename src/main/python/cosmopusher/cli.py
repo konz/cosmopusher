@@ -26,23 +26,22 @@ from cosmopusher.iot_pusher import IotPusher
 from cosmopusher.n560reader import N560Reader
 from cosmopusher.print_pusher import PrintPusher
 
-if __name__ == '__main__':
-    monkey.patch_all()
+monkey.patch_all()
 
-    arguments = docopt(__doc__)
+arguments = docopt(__doc__)
 
-    if arguments['--demo']:
-        stream = DemoStream()
-    else:
-        stream = serial.Serial("/dev/serial0", timeout=120)
+if arguments['--demo']:
+    stream = DemoStream()
+else:
+    stream = serial.Serial("/dev/serial0", timeout=120)
 
-    if arguments['--print']:
-        pusher = PrintPusher()
-    else:
-        pusher = IotPusher(arguments['--endpoint'], arguments['--root-ca'], arguments['--topic'])
+if arguments['--print']:
+    pusher = PrintPusher()
+else:
+    pusher = IotPusher(arguments['--endpoint'], arguments['--root-ca'], arguments['--topic'])
 
-    reader = N560Reader(stream, pusher)
-    try:
-        reader.run()
-    except KeyboardInterrupt:
-        print("exiting")
+reader = N560Reader(stream, pusher)
+try:
+    reader.run()
+except KeyboardInterrupt:
+    print("exiting")

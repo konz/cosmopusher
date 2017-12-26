@@ -17,3 +17,12 @@ def set_properties(project):
     project.depends_on("pyserial")
     project.depends_on("docopt")
     project.depends_on("AWSIoTPythonSDK")
+
+    project.set_property('distutils_console_scripts', ['cpusher=cosmopusher.cli:main'])
+    project.set_property('distutils_classifiers', [
+        'Development Status :: 4 - Beta',
+        'Environment :: Console',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: Apache Software License',
+        'Programming Language :: Python'
+])
