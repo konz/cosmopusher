@@ -21,6 +21,7 @@ import serial
 from docopt import docopt
 from gevent import monkey
 
+from cosmopusher.bytes_reader import BytesReader
 from cosmopusher.demo_stream import DemoStream
 from cosmopusher.iot_pusher import IotPusher
 from cosmopusher.n560reader import N560Reader
@@ -40,7 +41,7 @@ if arguments['--print']:
 else:
     pusher = IotPusher(arguments['--endpoint'], arguments['--root-ca'], arguments['--topic'])
 
-reader = N560Reader(stream, pusher)
+reader = N560Reader(BytesReader(stream), pusher)
 try:
     reader.run()
 except KeyboardInterrupt:
