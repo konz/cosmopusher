@@ -13,5 +13,5 @@ class IotPusher:
         self.client.connect()
         self.topic = topic
 
-    def push(self, payload):
-        self.client.publishAsync(self.topic, json.dumps(payload), 1)
+    def push(self, event_type, payload):
+        self.client.publishAsync("{}/{}".format(self.topic, event_type), json.dumps(payload), 1)

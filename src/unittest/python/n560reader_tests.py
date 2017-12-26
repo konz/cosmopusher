@@ -1,5 +1,6 @@
 from io import StringIO
 from unittest import TestCase, mock
+
 from hamcrest import match_equality, all_of, has_entry, matches_regexp
 
 from cosmopusher.n560reader import N560Reader
@@ -17,6 +18,7 @@ class N560ReaderTests(TestCase):
         reader.run()
 
         pusher.push.assert_called_with(
+            "data",
             match_equality(
                 all_of(
                     has_entry('time', matches_regexp(TIMESTAMP_REGEX)),
@@ -32,6 +34,7 @@ class N560ReaderTests(TestCase):
         reader.run()
 
         pusher.push.assert_called_with(
+            "settings",
             match_equality(
                 all_of(
                     has_entry('time', matches_regexp(TIMESTAMP_REGEX)),

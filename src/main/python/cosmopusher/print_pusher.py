@@ -28,5 +28,5 @@ class PrintLine(Greenlet):
 
 class PrintPusher(Greenlet):
 
-    def push(self, payload):
+    def push(self, _, payload):
         PrintLine.spawn(payload)
