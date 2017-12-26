@@ -33,7 +33,7 @@ arguments = docopt(__doc__)
 if arguments['--demo']:
     stream = DemoStream()
 else:
-    stream = serial.Serial("/dev/serial0", timeout=120)
+    stream = serial.Serial("/dev/serial0", baudrate=19200, timeout=120)
 
 if arguments['--print']:
     pusher = PrintPusher()
