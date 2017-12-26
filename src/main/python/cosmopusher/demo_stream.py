@@ -115,7 +115,8 @@ class DemoStream(Greenlet):
         Greenlet.__init__(self)
 
     def readlines(self):
-        for line in StringIO(DATA).readlines():
-            gevent.sleep(2)
-            yield line
+        while True:
+            for line in StringIO(DATA).readlines():
+                gevent.sleep(2)
+                yield line
 
