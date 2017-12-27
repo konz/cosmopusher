@@ -1,7 +1,7 @@
 import json
 import socket
 
-from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
+from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient, DROP_OLDEST
 
 
 class IotPusher:
@@ -10,6 +10,12 @@ class IotPusher:
         self.client = AWSIoTMQTTClient(socket.gethostname(), useWebsocket=True)
         self.client.configureEndpoint(iot_endpoint, 443)
         self.client.configureCredentials(rootca_file)
+
+        # wait 30 sec before reconnect, max backoff 5 minutes
+        self.client.configureAutoReconnectBackoffTime(30, 300, 20)
+        # buffer for 2 hours
+        self.client.configureOfflinePublishQueueing(3600, DROP_OLDEST)
+
         self.client.connect()
         self.topic = topic
 
