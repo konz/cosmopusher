@@ -1,7 +1,6 @@
 from io import StringIO
 
 import gevent
-from gevent import Greenlet
 
 DATA = '''18-Dec-17 22:01:33    99      66      49                     
 18-Dec-17 22:01:35    99      66      41                     
@@ -109,10 +108,7 @@ TIME                 %SpO2   BPM     PA     Status
 '''
 
 
-class DemoStream(Greenlet):
-
-    def __init__(self):
-        Greenlet.__init__(self)
+class DemoStream:
 
     def readlines(self):
         while True:
