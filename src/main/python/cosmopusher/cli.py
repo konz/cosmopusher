@@ -41,7 +41,6 @@ def main():
     else:
         logging.basicConfig(level=logging.WARNING, format=log_format)
 
-
     if arguments['--demo']:
         stream = DemoStream()
     else:
