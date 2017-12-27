@@ -4,8 +4,7 @@
 
 Usage:
   cpusher.py (-h | --help)
-  cpusher.py (-d | --demo)
-  cpusher.py [-d] --endpoint=ENDPOINT --root-ca=FILE [--topic=TOPIC_NAME]
+  cpusher.py [-d] [-X] --endpoint=ENDPOINT --root-ca=FILE [--topic=TOPIC_NAME]
   cpusher.py (-p | --print) [-d]
 
 Options:
@@ -13,10 +12,13 @@ Options:
   -d --demo                 Send some demo data.
   -p --print                Instead of sending it to IoT, just print out the data.
                             (together with some simulation of delay)
+  -X                        Enable debug logging
   --endpoint=HOSTNAME       AWS IoT endpoint
   --root-ca=FILE            AWS IoT root certificate file
   --topic=TOPIC_NAME        AWS IoT topic name [default: cosmo]
 """
+import logging
+
 import serial
 from docopt import docopt
 from gevent import monkey
@@ -29,20 +31,29 @@ from cosmopusher.print_pusher import PrintPusher
 
 monkey.patch_all()
 
-arguments = docopt(__doc__)
 
-if arguments['--demo']:
-    stream = DemoStream()
-else:
-    stream = serial.Serial("/dev/serial0", baudrate=19200, timeout=120)
+def main():
+    arguments = docopt(__doc__)
 
-if arguments['--print']:
-    pusher = PrintPusher()
-else:
-    pusher = IotPusher(arguments['--endpoint'], arguments['--root-ca'], arguments['--topic'])
+    log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    if arguments['-X']:
+        logging.basicConfig(level=logging.DEBUG, format=log_format)
+    else:
+        logging.basicConfig(level=logging.WARNING, format=log_format)
 
-reader = N560Reader(BytesReader(stream), pusher)
-try:
-    reader.run()
-except KeyboardInterrupt:
-    print("exiting")
+
+    if arguments['--demo']:
+        stream = DemoStream()
+    else:
+        stream = BytesReader(serial.Serial("/dev/serial0", baudrate=19200, timeout=120))
+
+    if arguments['--print']:
+        pusher = PrintPusher()
+    else:
+        pusher = IotPusher(arguments['--endpoint'], arguments['--root-ca'], arguments['--topic'])
+
+    reader = N560Reader(stream, pusher)
+    try:
+        reader.run()
+    except KeyboardInterrupt:
+        print("exiting")
