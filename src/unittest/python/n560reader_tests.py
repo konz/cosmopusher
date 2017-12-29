@@ -1,7 +1,7 @@
 from io import StringIO
 from unittest import TestCase, mock
 
-from hamcrest import match_equality, all_of, has_entry, matches_regexp
+from hamcrest import match_equality, all_of, has_entry, matches_regexp, has_key, not_
 
 from cosmopusher.n560reader import N560Reader
 
@@ -43,6 +43,22 @@ class N560ReaderTests(TestCase):
                     has_entry('pulseLowerLimit', 50),
                     has_entry('pulseUpperLimit', 170)
                 )))
+
+    def test_no_values(self):
+        pusher = mock.Mock()
+        data = StringIO("29-Dec-17 07:19:29   ---     ---     ---    SD          AS")
+
+        N560Reader(data, pusher).run()
+
+        pusher.push.assert_called_with(
+            "data",
+            match_equality(
+                all_of(
+                    has_entry('time', matches_regexp(TIMESTAMP_REGEX)),
+                    not_(has_key('spO2')),
+                    not_(has_key('pulse'))
+                )))
+
 
     def test_non_parseable_line(self):
         pusher = mock.Mock()

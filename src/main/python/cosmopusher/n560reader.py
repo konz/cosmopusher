@@ -28,14 +28,11 @@ class N560Reader:
         time = datetime.utcnow().isoformat()
 
         if data_match:
-            sp_o2 = int(data_match.group(2))
-            pulse = int(data_match.group(3))
+            payload = {'time': time}
+            payload = self.add_int_value(payload, 'spO2', data_match, 2)
+            payload = self.add_int_value(payload, 'pulse', data_match, 3)
 
-            self.pusher.push("data", {
-                'time': time,
-                'spO2': sp_o2,
-                'pulse': pulse
-            })
+            self.pusher.push("data", payload)
 
         elif settings_match:
             sp_o2_lower_limit = int(settings_match.group(3))
@@ -50,6 +47,14 @@ class N560Reader:
                 'pulseLowerLimit': pulse_lower_limit,
                 'pulseUpperLimit': pulse_upper_limit
             })
+
+    @staticmethod
+    def add_int_value(payload, key, matcher, group):
+        try:
+            payload[key] = int(matcher.group(group))
+        except ValueError:
+            pass
+        return payload
 
     def stop(self):
         self.running = False
