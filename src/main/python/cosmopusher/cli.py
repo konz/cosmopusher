@@ -5,7 +5,7 @@
 Usage:
   cpusher.py (-h | --help)
   cpusher.py [-d] [-X] --endpoint=ENDPOINT --root-ca=FILE [--topic=TOPIC_NAME]
-  cpusher.py (-p | --print) [-d]
+  cpusher.py (-p | --print) [-d] [-X]
 
 Options:
   -h --help                 Show this screen.
@@ -44,7 +44,7 @@ def main():
     if arguments['--demo']:
         stream = DemoStream()
     else:
-        stream = BytesReader(serial.Serial("/dev/serial0", baudrate=19200, timeout=120))
+        stream = BytesReader(serial.Serial("/dev/serial0", baudrate=19200, timeout=None))
 
     if arguments['--print']:
         pusher = PrintPusher()
