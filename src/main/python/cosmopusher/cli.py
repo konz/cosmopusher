@@ -21,15 +21,12 @@ import logging
 
 import serial
 from docopt import docopt
-from gevent import monkey
 
 from cosmopusher.bytes_reader import BytesReader
 from cosmopusher.demo_stream import DemoStream
 from cosmopusher.iot_pusher import IotPusher
 from cosmopusher.n560reader import N560Reader
 from cosmopusher.print_pusher import PrintPusher
-
-monkey.patch_all()
 
 
 def main():

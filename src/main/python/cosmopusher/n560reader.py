@@ -2,8 +2,6 @@ import logging
 import re
 from datetime import datetime
 
-import gevent
-
 DATA_REGEX = re.compile('^(\d{2}-\w{3}-\d{2} \d{2}:\d{2}:\d{2})\s+(\d+|---)\*?\s+(\d+|---)\*?\s+(\d+|---)(.*)$')
 SETTINGS_REGEX = re.compile('^(\S+)\s+VERSION (\S+).*?SpO2 Limit: (\d+)-(\d+)%\s+PR Limit: (\d+)-(\d+)BPM$')
 
@@ -23,7 +21,6 @@ class N560Reader:
                 break
             self.process_line(line)
 
-        gevent.wait()
         LOGGER.info("no more data - exiting")
 
     def process_line(self, line):

@@ -13,7 +13,6 @@ default_task = "publish"
 @init
 def set_properties(project):
     project.build_depends_on("pyhamcrest")
-    project.depends_on("gevent")
     project.depends_on("pyserial")
     project.depends_on("docopt")
     project.depends_on("AWSIoTPythonSDK")

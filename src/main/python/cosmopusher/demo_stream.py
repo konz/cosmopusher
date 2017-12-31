@@ -1,6 +1,5 @@
 from io import StringIO
-
-import gevent
+from time import sleep
 
 DATA = '''29-Dec-17 07:18:43    99      66      12                     
 29-Dec-17 07:18:45    99      66      17    MO               
@@ -95,6 +94,6 @@ class DemoStream:
     def readlines(self):
         while True:
             for line in StringIO(DATA).readlines():
-                gevent.sleep(2)
+                sleep(2)
                 yield line
 
