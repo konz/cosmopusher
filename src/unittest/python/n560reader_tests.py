@@ -5,7 +5,7 @@ from hamcrest import match_equality, all_of, has_entry, matches_regexp, has_key,
 
 from cosmopusher.n560reader import N560Reader
 
-TIMESTAMP_REGEX = '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6}$'
+TIMESTAMP_REGEX = '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$'
 
 
 class N560ReaderTests(TestCase):
