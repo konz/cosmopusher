@@ -26,7 +26,7 @@ class N560Reader:
     def process_line(self, line):
         data_match = DATA_REGEX.match(line)
         settings_match = SETTINGS_REGEX.match(line)
-        time = datetime.now().replace(microsecond=0).isoformat()
+        time = datetime.utcnow().replace(microsecond=0).isoformat()
 
         if data_match:
             payload = {'time': time}
