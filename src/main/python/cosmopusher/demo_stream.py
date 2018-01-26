@@ -1,7 +1,8 @@
 from io import StringIO
 from time import sleep
 
-DATA = '''29-Dec-17 07:18:43    99      66      12                     
+DATA = '''sóme garbäge first
+29-Dec-17 07:18:43    99      66      12                     
 29-Dec-17 07:18:45    99      66      17    MO               
 29-Dec-17 07:18:47    99      66      18    MO               
 29-Dec-17 07:18:49    99      66      52                     

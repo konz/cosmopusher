@@ -5,4 +5,4 @@ class BytesReader:
 
     def readlines(self):
         while True:
-            yield self.byte_stream.readline().decode("ascii").rstrip()
+            yield self.byte_stream.readline().decode('ascii', errors='ignore').rstrip()

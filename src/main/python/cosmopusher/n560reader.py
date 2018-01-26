@@ -49,6 +49,9 @@ class N560Reader:
                 'pulseUpperLimit': pulse_upper_limit
             })
 
+        else:
+            LOGGER.info("unparsable line: {}".format(line))
+
     @staticmethod
     def add_int_value(payload, key, matcher, group):
         try:
