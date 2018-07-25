@@ -4,8 +4,8 @@
 
 Usage:
   cpusher.py (-h | --help)
-  cpusher.py [-d] [-X] --endpoint=ENDPOINT --root-ca=FILE [--topic=TOPIC_NAME]
-  cpusher.py (-p | --print) [-d] [-X]
+  cpusher.py [-d] [-X] [--logfile=FILE]--endpoint=ENDPOINT --root-ca=FILE [--topic=TOPIC_NAME]
+  cpusher.py (-p | --print) [-d] [-X] [--logfile=FILE]
 
 Options:
   -h --help                 Show this screen.
@@ -13,11 +13,14 @@ Options:
   -p --print                Instead of sending it to IoT, just print out the data.
                             (together with some simulation of delay)
   -X                        Enable debug logging
+  --logfile=FILE            Log to a FILE instead of STDOUT
   --endpoint=HOSTNAME       AWS IoT endpoint
   --root-ca=FILE            AWS IoT root certificate file
   --topic=TOPIC_NAME        AWS IoT topic name [default: cosmo]
 """
 import logging
+import sys
+from logging.handlers import TimedRotatingFileHandler
 
 import serial
 from docopt import docopt
@@ -32,11 +35,19 @@ from cosmopusher.print_pusher import PrintPusher
 def main():
     arguments = docopt(__doc__)
 
-    log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    if arguments['-X']:
-        logging.basicConfig(level=logging.DEBUG, format=log_format)
+    logger = logging.getLogger()
+    if arguments['--logfile']:
+        handler = TimedRotatingFileHandler(arguments['--logfile'], when='D')
     else:
-        logging.basicConfig(level=logging.WARNING, format=log_format)
+        handler = logging.StreamHandler(sys.stdout)
+
+    handler.setFormatter(logging.Formatter(fmt='%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+    logger.addHandler(handler)
+
+    if arguments['-X']:
+        logger.setLevel(logging.DEBUG)
+    else:
+        logger.setLevel(logging.WARNING)
 
     if arguments['--demo']:
         stream = DemoStream()
