@@ -4,7 +4,7 @@
 
 Usage:
   cpusher.py (-h | --help)
-  cpusher.py [-d] [-X] --endpoint=ENDPOINT --root-ca=FILE [--topic=TOPIC_NAME]
+  cpusher.py [-d] [-X] [--endpoint=ENDPOINT] --root-ca=FILE [--topic=TOPIC_NAME]
   cpusher.py (-p | --print) [-d] [-X]
 
 Options:
@@ -18,6 +18,7 @@ Options:
   --topic=TOPIC_NAME        AWS IoT topic name [default: cosmo]
 """
 import logging
+import os
 
 import serial
 from docopt import docopt
@@ -32,24 +33,42 @@ from cosmopusher.print_pusher import PrintPusher
 def main():
     arguments = docopt(__doc__)
 
+    configure_logging(arguments)
+
+    input_stream = configure_input_stream(arguments)
+    pusher = configure_pusher(arguments)
+    reader = N560Reader(input_stream, pusher)
+    try:
+        reader.run()
+    except KeyboardInterrupt:
+        print("exiting")
+
+
+def configure_pusher(arguments):
+    if arguments['--print']:
+        return PrintPusher()
+    else:
+        if arguments['--endpoint']:
+            iot_endpoint = arguments['--endpoint']
+        elif os.environ['IOT_ENDPOINT']:
+            iot_endpoint = os.environ['IOT_ENDPOINT']
+        else:
+            print("Either --endpoint or environment varible IOT_ENPOINT required")
+            exit(1)
+
+        return IotPusher(iot_endpoint, arguments['--root-ca'], arguments['--topic'])
+
+
+def configure_input_stream(arguments):
+    if arguments['--demo']:
+        return DemoStream()
+    else:
+        return BytesReader(serial.Serial("/dev/serial0", baudrate=19200, timeout=None))
+
+
+def configure_logging(arguments):
     log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     if arguments['-X']:
         logging.basicConfig(level=logging.DEBUG, format=log_format)
     else:
         logging.basicConfig(level=logging.WARNING, format=log_format)
-
-    if arguments['--demo']:
-        stream = DemoStream()
-    else:
-        stream = BytesReader(serial.Serial("/dev/serial0", baudrate=19200, timeout=None))
-
-    if arguments['--print']:
-        pusher = PrintPusher()
-    else:
-        pusher = IotPusher(arguments['--endpoint'], arguments['--root-ca'], arguments['--topic'])
-
-    reader = N560Reader(stream, pusher)
-    try:
-        reader.run()
-    except KeyboardInterrupt:
-        print("exiting")
