@@ -1,10 +1,11 @@
-FROM python:3.7
+FROM python:3.7-alpine
 
 ARG DIST_NAME=cosmopusher-1.0.dev0
 
 ARG AWS_ACCESS_KEY_ID
 ENV AWS_ACCESS_KEY_ID ${AWS_ACCESS_KEY_ID}
 
+# not recommended but ok for me as I don't push the image anywhere remote
 ARG AWS_SECRET_ACCESS_KEY
 ENV AWS_SECRET_ACCESS_KEY ${AWS_SECRET_ACCESS_KEY}
 
@@ -18,4 +19,4 @@ RUN pip install $DIST_NAME.tar.gz &&\
     rm $DIST_NAME.tar.gz
 
 ENTRYPOINT ["cpusher"]
-CMD ["-d", "--root-ca", "AmazonRootCA1.pem"]
+CMD ["-X", "--root-ca", "AmazonRootCA1.pem"]
