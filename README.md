@@ -6,3 +6,12 @@ Reads and parses data from Nellcor N560 pulse oximeters and sends it to AWS IoT 
 used on a Raspberry Pi connected via serial port to the pulse oxy. 
 
 Processing of the data -- e.g. monitoring, analytics -- will be developed in other projects. 
+
+## Development
+Known to work with Python 3.7
+
+```bash
+pip install pybuilder
+pyb install_dependencies
+pyb
+```
